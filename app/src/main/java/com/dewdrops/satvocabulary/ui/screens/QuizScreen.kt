@@ -18,6 +18,8 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
     val score by viewModel.quizScore.collectAsState()
     val isFinished by viewModel.isQuizFinished.collectAsState()
 
+    var selectedOption by remember(currentIndex) { mutableStateOf<String?>(null) }
+
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
@@ -65,6 +67,18 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        val percentage = (score.toFloat() / questions.size) * 100
+                        Text(
+                            text = when {
+                                percentage >= 80 -> "Outstanding! You're SAT ready! 🚀"
+                                percentage >= 50 -> "Good job! Keep practicing! 📚"
+                                else -> "Keep reviewing your flashcards! 💪"
+                            },
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(onClick = { viewModel.generateQuiz() }) {
                             Text("Try Again")
@@ -87,11 +101,22 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
                                 modifier = Modifier.fillMaxWidth()
                             )
                             Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Question ${currentIndex + 1} of ${questions.size}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = "Question ${currentIndex + 1} of ${questions.size}",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = "Score: $score",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.secondary
+                                )
+                            }
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = question.questionText,
@@ -106,12 +131,30 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
                             question.options.forEach { option ->
+                                val isSelected = selectedOption == option
+                                val isCorrect = option == question.correctAnswer
+                                val buttonColor = when {
+                                    selectedOption != null && isCorrect -> MaterialTheme.colorScheme.primaryContainer
+                                    selectedOption != null && isSelected -> MaterialTheme.colorScheme.errorContainer
+                                    else -> MaterialTheme.colorScheme.surfaceVariant
+                                }
+                                val textColor = when {
+                                    selectedOption != null && isCorrect -> MaterialTheme.colorScheme.onPrimaryContainer
+                                    selectedOption != null && isSelected -> MaterialTheme.colorScheme.onErrorContainer
+                                    else -> MaterialTheme.colorScheme.onSurfaceVariant
+                                }
+
                                 Button(
-                                    onClick = { viewModel.answerQuizQuestion(option) },
+                                    onClick = {
+                                        if (selectedOption == null) {
+                                            selectedOption = option
+                                            viewModel.answerQuizQuestion(option)
+                                        }
+                                    },
                                     modifier = Modifier.fillMaxWidth(),
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                        containerColor = buttonColor,
+                                        contentColor = textColor
                                     )
                                 ) {
                                     Text(
@@ -120,6 +163,16 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
                                         textAlign = TextAlign.Center,
                                         modifier = Modifier.padding(8.dp)
                                     )
+                                }
+                            }
+
+                            if (selectedOption != null) {
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Button(
+                                    onClick = { selectedOption = null },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Next Question")
                                 }
                             }
                         }

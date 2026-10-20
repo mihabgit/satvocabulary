@@ -29,7 +29,7 @@ sealed class Screen(val route: String, val title: String, val icon: androidx.com
 }
 
 @Composable
-fun AppNavigation(viewModel: VocabularyViewModel) {
+fun AppNavigation(viewModel: VocabularyViewModel, initialWordId: Int? = null) {
     val navController = rememberNavController()
     val items = listOf(
         Screen.Flashcards,
@@ -37,6 +37,12 @@ fun AppNavigation(viewModel: VocabularyViewModel) {
         Screen.Quiz,
         Screen.Settings
     )
+
+    LaunchedEffect(initialWordId) {
+        if (initialWordId != null && initialWordId != -1) {
+            navController.navigate("word_detail/$initialWordId")
+        }
+    }
 
     Scaffold(
         bottomBar = {
