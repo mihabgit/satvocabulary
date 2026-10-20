@@ -1,5 +1,6 @@
 package com.dewdrops.satvocabulary.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +19,7 @@ import com.dewdrops.satvocabulary.ui.components.AdBannerView
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
 
 @Composable
-fun WordListScreen(viewModel: VocabularyViewModel) {
+fun WordListScreen(viewModel: VocabularyViewModel, onWordClick: (Int) -> Unit) {
     val words by viewModel.words.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
     val filterTab by viewModel.filterTab.collectAsState()
@@ -84,7 +85,9 @@ fun WordListScreen(viewModel: VocabularyViewModel) {
             ) {
                 items(words) { word ->
                     Card(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onWordClick(word.id) },
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant

@@ -1,9 +1,11 @@
 package com.dewdrops.satvocabulary.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.dewdrops.satvocabulary.data.VocabularyWord
 import com.dewdrops.satvocabulary.data.VocabularyRepository
+import com.dewdrops.satvocabulary.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,16 +28,29 @@ enum class QuizType {
 
 class VocabularyViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = VocabularyRepository(application)
+    private val prefs = application.getSharedPreferences("sat_vocab_prefs", Context.MODE_PRIVATE)
 
-    private val _themeMode = MutableStateFlow(com.dewdrops.satvocabulary.ui.theme.ThemeMode.SYSTEM)
-    val themeMode: StateFlow<com.dewdrops.satvocabulary.ui.theme.ThemeMode> = _themeMode.asStateFlow()
+    private val _themeMode = MutableStateFlow(
+        try {
+            ThemeMode.valueOf(prefs.getString("theme_mode", "SYSTEM") ?: "SYSTEM")
+        } catch (e: Exception) {
+            ThemeMode.SYSTEM
+        }
+    )
+    val themeMode: StateFlow<ThemeMode> = _themeMode.asStateFlow()
 
-    fun setThemeMode(mode: com.dewdrops.satvocabulary.ui.theme.ThemeMode) {
+    fun setThemeMode(mode: ThemeMode) {
         _themeMode.value = mode
+        prefs.edit().putString("theme_mode", mode.name).apply()
     }
 
-    private val _targetLanguage = MutableStateFlow("Spanish")
+    private val _targetLanguage = MutableStateFlow(prefs.getString("target_language", "Spanish") ?: "Spanish")
     val targetLanguage: StateFlow<String> = _targetLanguage.asStateFlow()
+
+    fun setTargetLanguage(language: String) {
+        _targetLanguage.value = language
+        prefs.edit().putString("target_language", language).apply()
+    }
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
@@ -71,10 +86,6 @@ class VocabularyViewModel(application: Application) : AndroidViewModel(applicati
 
     fun toggleBookmark(wordId: Int) {
         repository.toggleBookmark(wordId)
-    }
-
-    fun setTargetLanguage(language: String) {
-        _targetLanguage.value = language
     }
 
     fun setSearchQuery(query: String) {

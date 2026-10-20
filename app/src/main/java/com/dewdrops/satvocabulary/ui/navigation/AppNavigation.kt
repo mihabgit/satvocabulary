@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dewdrops.satvocabulary.ui.screens.FlashcardScreen
 import com.dewdrops.satvocabulary.ui.screens.QuizScreen
 import com.dewdrops.satvocabulary.ui.screens.SettingsScreen
+import com.dewdrops.satvocabulary.ui.screens.WordDetailScreen
 import com.dewdrops.satvocabulary.ui.screens.WordListScreen
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
 
@@ -80,9 +81,19 @@ fun AppNavigation(viewModel: VocabularyViewModel) {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Flashcards.route) { FlashcardScreen(viewModel) }
-            composable(Screen.Dictionary.route) { WordListScreen(viewModel) }
+            composable(Screen.Dictionary.route) { 
+                WordListScreen(viewModel, onWordClick = { wordId ->
+                    navController.navigate("word_detail/$wordId")
+                }) 
+            }
             composable(Screen.Quiz.route) { QuizScreen(viewModel) }
             composable(Screen.Settings.route) { SettingsScreen(viewModel) }
+            composable("word_detail/{wordId}") { backStackEntry ->
+                val wordId = backStackEntry.arguments?.getString("wordId")?.toIntOrNull() ?: 1
+                WordDetailScreen(wordId = wordId, viewModel = viewModel, onBack = {
+                    navController.popBackStack()
+                })
+            }
         }
     }
 }
