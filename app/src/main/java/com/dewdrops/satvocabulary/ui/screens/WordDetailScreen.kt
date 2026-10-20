@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.dewdrops.satvocabulary.ui.components.AdBannerView
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WordDetailScreen(wordId: Int, viewModel: VocabularyViewModel, onBack: () -> Unit) {
     val words by viewModel.words.collectAsState()
@@ -25,19 +25,8 @@ fun WordDetailScreen(wordId: Int, viewModel: VocabularyViewModel, onBack: () -> 
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = {
-            TopAppBar(
-                title = { Text("Word Details") },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
+        bottomBar = {
+            AdBannerView()
         }
     ) { padding ->
         if (word == null) {
@@ -54,11 +43,27 @@ fun WordDetailScreen(wordId: Int, viewModel: VocabularyViewModel, onBack: () -> 
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
-                    .statusBarsPadding()
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
+                // Inline Header with Back Button matching other pages
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Word Details",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
