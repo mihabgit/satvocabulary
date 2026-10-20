@@ -26,7 +26,7 @@ fun WordDetailScreen(wordId: Int, viewModel: VocabularyViewModel, onBack: () -> 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            AdBannerView()
+            //AdBannerView()
         }
     ) { padding ->
         if (word == null) {

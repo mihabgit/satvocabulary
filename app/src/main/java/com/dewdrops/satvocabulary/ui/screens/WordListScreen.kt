@@ -28,7 +28,7 @@ fun WordListScreen(viewModel: VocabularyViewModel, onWordClick: (Int) -> Unit) {
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            AdBannerView()
+            //AdBannerView()
         }
     ) { padding ->
         Column(
