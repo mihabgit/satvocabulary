@@ -51,6 +51,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.work:work-runtime-ktx:2.12.0")
     implementation("com.google.android.gms:play-services-ads:25.5.0")
+    implementation("com.google.android.play:review-ktx:2.0.2")
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

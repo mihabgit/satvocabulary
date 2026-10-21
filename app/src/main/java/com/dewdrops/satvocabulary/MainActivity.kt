@@ -17,6 +17,7 @@ import androidx.work.WorkManager
 import com.dewdrops.satvocabulary.ui.navigation.AppNavigation
 import com.dewdrops.satvocabulary.ui.theme.SatVocabularyTheme
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
+import com.dewdrops.satvocabulary.utils.InAppReviewThrottleManager
 import com.dewdrops.satvocabulary.utils.InterstitialAdHelper
 import com.dewdrops.satvocabulary.utils.WordOfDayWorker
 import com.google.android.gms.ads.MobileAds
@@ -34,6 +35,9 @@ class MainActivity : ComponentActivity() {
         // Initialize Google Mobile Ads SDK
         MobileAds.initialize(this) {}
         InterstitialAdHelper.loadAd(this)
+
+        // Check and potentially trigger In-App Review (with cooldown and engagement rules)
+        InAppReviewThrottleManager.checkAndShowReview(this)
 
         // Request notification permission on Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
