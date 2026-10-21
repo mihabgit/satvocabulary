@@ -5,11 +5,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.dewdrops.satvocabulary.ui.components.AdBannerView
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
+import com.dewdrops.satvocabulary.utils.InterstitialAdHelper
 
 @Composable
 fun QuizScreen(viewModel: VocabularyViewModel) {
@@ -17,13 +19,23 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
     val currentIndex by viewModel.currentQuizIndex.collectAsState()
     val score by viewModel.quizScore.collectAsState()
     val isFinished by viewModel.isQuizFinished.collectAsState()
+    val context = LocalContext.current
 
     var selectedOption by remember(currentIndex) { mutableStateOf<String?>(null) }
+
+    // Show Interstitial Ad when quiz is finished
+    LaunchedEffect(isFinished) {
+        if (isFinished) {
+            InterstitialAdHelper.showAd(context) {
+                // Ad dismissed callback
+            }
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         bottomBar = {
-            //AdBannerView()
+            AdBannerView()
         }
     ) { padding ->
         Column(

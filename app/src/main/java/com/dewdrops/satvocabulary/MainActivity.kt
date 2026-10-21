@@ -17,19 +17,23 @@ import androidx.work.WorkManager
 import com.dewdrops.satvocabulary.ui.navigation.AppNavigation
 import com.dewdrops.satvocabulary.ui.theme.SatVocabularyTheme
 import com.dewdrops.satvocabulary.ui.viewmodel.VocabularyViewModel
+import com.dewdrops.satvocabulary.utils.InterstitialAdHelper
 import com.dewdrops.satvocabulary.utils.WordOfDayWorker
+import com.google.android.gms.ads.MobileAds
 import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        // Permission granted or denied handling if needed
-    }
+    ) { _: Boolean -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Initialize Google Mobile Ads SDK
+        MobileAds.initialize(this) {}
+        InterstitialAdHelper.loadAd(this)
 
         // Request notification permission on Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
