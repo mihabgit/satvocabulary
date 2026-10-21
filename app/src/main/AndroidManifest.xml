@@ -19,7 +19,7 @@
         <!-- AdMob App ID (Test ID) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3343011771"/>
+            android:value="ca-app-pub-7459846649291784~5115114950"/>
 
         <activity
             android:name=".MainActivity"

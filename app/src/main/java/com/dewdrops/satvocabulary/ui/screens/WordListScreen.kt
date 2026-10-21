@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -47,13 +48,14 @@ fun WordListScreen(viewModel: VocabularyViewModel, onWordClick: (Int) -> Unit) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Search Bar
+            // Search Bar (Round / Pill-shaped)
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.setSearchQuery(it) },
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Search SAT words...") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                shape = CircleShape,
                 singleLine = true
             )
 
