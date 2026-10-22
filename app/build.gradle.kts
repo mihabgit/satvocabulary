@@ -13,8 +13,8 @@ android {
         applicationId = "com.dewdrops.satvocabulary"
         minSdk = 24
         targetSdk = 37
-        versionCode = 102
-        versionName = "1.0.2"
+        versionCode = 104
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +52,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.12.0")
     implementation("com.google.android.gms:play-services-ads:25.5.0")
     implementation("com.google.android.play:review-ktx:2.0.2")
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
 
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

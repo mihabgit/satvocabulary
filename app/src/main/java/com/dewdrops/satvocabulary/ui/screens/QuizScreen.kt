@@ -33,15 +33,13 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
     }
 
     Scaffold(
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        bottomBar = {
-            AdBannerView()
-        }
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .statusBarsPadding()
                 .padding(16.dp)
         ) {
             // Header
@@ -52,7 +50,9 @@ fun QuizScreen(viewModel: VocabularyViewModel) {
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            AdBannerView()
+            Spacer(modifier = Modifier.height(12.dp))
 
             Box(
                 modifier = Modifier

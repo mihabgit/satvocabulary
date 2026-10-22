@@ -36,7 +36,8 @@ fun WordListScreen(viewModel: VocabularyViewModel, onWordClick: (Int) -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             // Header
             Text(
@@ -80,9 +81,10 @@ fun WordListScreen(viewModel: VocabularyViewModel, onWordClick: (Int) -> Unit) {
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Word List
+            // Word List with bottom padding so items are never obscured by ad banner
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(bottom = 80.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(words) { word ->
